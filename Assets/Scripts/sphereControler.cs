@@ -9,45 +9,41 @@ public class sphereControler : MonoBehaviour // Dziedziczenie po klasie MonoBeha
     
     [Header("Control Settings")]
     [SerializeField]
-    private float speed = 2f;
+    private float speed = 2f;    
+    private Rigidbody rb;
+    private bool isRigidBody;
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(transform.position);
-        Debug.Log(transform.rotation.eulerAngles);
-        Debug.Log(transform.localScale);
+        // rb = GetComponent<Rigidbody>();
+        isRigidBody = TryGetComponent<Rigidbody>(out rb);
     }
 
     // Update is called once per frame
     void Update()
     {
-        float direction;
+        float Hdirection;
+        float Vdirection;
         Debug.Log(Input.GetAxis("Horizontal"));
 
-        if((direction = Input.GetAxis("Horizontal")) != 0) // pobiera oś z ustaloną w input managerze
-        { 
-            Debug.Log("Klikamy strzałki!");
-        } 
 
-        if(Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.Translate(-1f * Time.deltaTime * speed,0, 0, Space.World); // Space.World po zrotowaniu dalej będzie szła kula w lewo
-        }
-        
-        if(Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.Translate(1f * Time.deltaTime * speed,0, 0, Space.World); // translacja nie niweluje pędu, to jak teleportacja xD
-        }
-
-        if(Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.Translate(0,0, 1f * Time.deltaTime * speed, Space.World); 
-        }
-
-        if(Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.Translate(0,0, -1f * Time.deltaTime * speed, Space.World); 
+        if(isRigidBody){
+            if((Hdirection = Input.GetAxis("Horizontal")) != 0 && (Vdirection = Input.GetAxis("Vertical")) != 0){
+                rb.AddTorque(0,0,-Hdirection * Time.deltaTime * speed);
+                rb.AddTorque(Vdirection * Time.deltaTime * speed,0,0);
+            }
+            else if((Hdirection = Input.GetAxis("Horizontal")) != 0) // pobiera oś ustaloną w input managerze
+            { 
+            
+                // rb.AddForce(direction * Time.deltaTime * speed,0, 0);
+                rb.AddTorque(0,0,-Hdirection * Time.deltaTime * speed);
+            } 
+            else if((Vdirection = Input.GetAxis("Vertical")) != 0)
+            { 
+                // rb.AddForce(0,0, direction * Time.deltaTime * speed);
+                rb.AddTorque(Vdirection * Time.deltaTime * speed,0,0);
+            }
         }
     }
 }
