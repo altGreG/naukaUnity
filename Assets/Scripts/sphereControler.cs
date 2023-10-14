@@ -9,7 +9,9 @@ public class sphereControler : MonoBehaviour // Dziedziczenie po klasie MonoBeha
     
     [Header("Control Settings")]
     [SerializeField]
-    private float speed = 2f;    
+    private float speed = 2f;
+    public float maxAngularVelocity;
+
     private Rigidbody rb;
     private bool isRigidBody;
 
@@ -17,7 +19,10 @@ public class sphereControler : MonoBehaviour // Dziedziczenie po klasie MonoBeha
     void Start()
     {
         // rb = GetComponent<Rigidbody>();
-        isRigidBody = TryGetComponent<Rigidbody>(out rb);
+        if(isRigidBody = TryGetComponent<Rigidbody>(out rb)){
+            rb.maxAngularVelocity = maxAngularVelocity;
+            Debug.Log(rb.maxAngularVelocity);
+        }
     }
 
     // Update is called once per frame
@@ -25,7 +30,6 @@ public class sphereControler : MonoBehaviour // Dziedziczenie po klasie MonoBeha
     {
         float Hdirection;
         float Vdirection;
-        Debug.Log(Input.GetAxis("Horizontal"));
 
 
         if(isRigidBody){
